@@ -7,11 +7,16 @@ public class RobotMap {
 	final static int RIGHT_MOTOR_PORT = 1;
 	final static int LEFT_JOYSTICK_PORT = 1;
 	final static int RIGHT_JOYSTICK_PORT = 0;
-	final static double MOTOR_SPEED = 0.6;
+	final static double MOTOR_SPEED = 0.5;
 	final static double MOTOR_ADJUST = .91;
 	final static int MOTOR_DIRECTION_LEFT = -1;
 	final static int MOTOR_DIRECTION_RIGHT = 1;
 	
 	final static double MOTOR_FULL_ADJUST_LEFT = RobotMap.MOTOR_DIRECTION_LEFT*RobotMap.MOTOR_SPEED;
 	final static double MOTOR_FULL_ADJUST_RIGHT = RobotMap.MOTOR_DIRECTION_RIGHT*RobotMap.MOTOR_ADJUST*RobotMap.MOTOR_SPEED;
+
+	final static double AUTO_MOTOR_ADJUST = 0.5;
+	
+	
 }
+

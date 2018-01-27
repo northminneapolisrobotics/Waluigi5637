@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -28,7 +29,6 @@ public class Robot extends IterativeRobot {
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
-	
 	TalonSRX leftT = new TalonSRX(RobotMap.LEFT_MOTOR_PORT);
 	TalonSRX rightT = new TalonSRX(RobotMap.RIGHT_MOTOR_PORT);
 	Joystick joystickL = new Joystick(RobotMap.LEFT_JOYSTICK_PORT);
@@ -39,6 +39,11 @@ public class Robot extends IterativeRobot {
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
+	public Timer.Interface newTimer() {
+		return null;
+		
+	}
+	
 	@Override
 	public void robotInit() {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
@@ -77,6 +82,16 @@ public class Robot extends IterativeRobot {
 				break;
 			case kDefaultAuto:
 			default:
+				// sets the motors to half normal speed for autonomous to avoid damage
+					
+					if(){
+						
+					}
+					else{
+						leftT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_LEFT*1);
+						rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_RIGHT*1);
+					
+					}
 				// Put default auto code here
 				break;
 		}
