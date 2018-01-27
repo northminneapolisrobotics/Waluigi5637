@@ -7,7 +7,11 @@
 
 package org.usfirst.frc.team2264.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,12 +22,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
+
 public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
-
+	
+	TalonSRX leftT = new TalonSRX(RobotMap.LEFT_MOTOR_PORT);
+	TalonSRX rightT = new TalonSRX(RobotMap.RIGHT_MOTOR_PORT);
+	Joystick joystickL = new Joystick(RobotMap.LEFT_JOYSTICK_PORT);
+	Joystick joystickR = new Joystick(RobotMap.RIGHT_JOYSTICK_PORT);
+	
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -33,6 +44,7 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		
 	}
 
 	/**
@@ -73,8 +85,15 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control.
 	 */
+	
 	@Override
 	public void teleopPeriodic() {
+		//puts the y number of the joysticks on the dashboard.
+		SmartDashboard.putNumber("Left Joystick" , joystickL.getY());
+		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
+		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_SPEED*joystickL.getY());
+		rightT.set(ControlMode.PercentOutput, RobotMap.MOTOR_SPEED*joystickR.getY());
+		
 	}
 
 	/**
