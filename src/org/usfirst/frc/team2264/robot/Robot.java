@@ -91,8 +91,8 @@ public class Robot extends IterativeRobot {
 		//puts the y number of the joysticks on the dashboard.
 		SmartDashboard.putNumber("Left Joystick" , joystickL.getY());
 		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
-		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_SPEED*joystickL.getY());
-		rightT.set(ControlMode.PercentOutput, RobotMap.MOTOR_SPEED*joystickR.getY());
+		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY());
+		rightT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY());
 		
 	}
 
