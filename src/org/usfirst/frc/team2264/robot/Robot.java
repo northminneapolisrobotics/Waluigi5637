@@ -11,11 +11,13 @@
 
  import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
- import edu.wpi.first.wpilibj.IterativeRobot;
+ import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.IterativeRobot;
  import edu.wpi.first.wpilibj.Joystick;
  import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  import edu.wpi.first.wpilibj.command.TimedCommand;
@@ -34,18 +36,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  	private SendableChooser<String> m_chooser = new SendableChooser<>();
  	private double autoStartTime;
  	
- 	
+ 	TalonSRX winchMotor = new TalonSRX(RobotMap.WINCH_MOTOR_PORT);
+ 	TalonSRX intakeFour = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_FOUR);
+ 	TalonSRX intakeThree = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_THREE);
+ 	TalonSRX intakeTwo = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_TWO);
+ 	TalonSRX intakeOne = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_ONE);
  	TalonSRX boxLift = new TalonSRX(RobotMap.BOX_LIFT_MOTOR_PORT);
  	TalonSRX leftBT = new TalonSRX(RobotMap.LEFT_SEC_MOTOR_PORT);
  	TalonSRX rightBT = new TalonSRX(RobotMap.RIGHT_SEC_MOTOR_PORT);
  	TalonSRX leftT = new TalonSRX(RobotMap.LEFT_MOTOR_PORT);
  	TalonSRX rightT = new TalonSRX(RobotMap.RIGHT_MOTOR_PORT);
+ 	
  	Joystick joystickL = new Joystick(RobotMap.LEFT_JOYSTICK_PORT);
  	Joystick joystickR = new Joystick(RobotMap.RIGHT_JOYSTICK_PORT);
+ 	XboxController xBox = new XboxController(RobotMap.XBOX_PORT);
  	
- 	Button liftUp = new JoystickButton(joystickR, RobotMap.LIFT_BUTTON_UP);
- 	Button liftDown = new JoystickButton(joystickL, RobotMap.LIFT_BUTTON_DOWN);
-	
  	TimedCommand autoForward = new TimedCommand(RobotMap.AUTO_TIMER);
  	
  	/**
@@ -128,8 +133,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		rightBT.set(ControlMode.PercentOutput, 0);
  	}
  	private void autoForward() {
-		// TODO Auto-generated method stub
- 		
  		leftBT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*1);
  		leftT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_LEFT*1);
 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_RIGHT*1);
@@ -147,24 +150,70 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
  		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY());
  		leftBT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*joystickL.getY());
- 		rightT.set(ControlMode.PercentOutput, 0.81*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY());
- 		rightT.set(ControlMode.PercentOutput, 0.81*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY());
+ 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY());
+ 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY());
  		
- 		if(getButton(liftUp)()))
+ 		if(getBoxLiftAct() > 0.1)
  		{
- 			 boxLift.set(ControlMode.PercentOutput, 1);
+ 			 boxLift.set(ControlMode.PercentOutput, getRightTriggerAxis(GenericHID.Hand.kRight));
  		}
- 		else if(getButton(liftDown)()))
+ 		//switch to triggers
+ 		else if(getBoxLiftRev() > 0.1)
  		{
- 			boxLift.set(ControlMode.PercentOutput, -1);
+ 			boxLift.set(ControlMode.PercentOutput, -1*getLeftTriggerAxis(GenericHID.Hand.kLeft));
  		}
  		
+ 		if(getWinchAct()){
+ 			winchMotor.set(ControlMode.PercentOutput, .5);
+ 		}
+ 		//set to bumpers
+ 		else if(getWinchRev()){
+ 			winchMotor.set(ControlMode.PercentOutput, -.5);
+ 		}
+ 		
+ 		if(getIntakeIn()){
+ 			
+ 			intakeOne.set(ControlMode.PercentOutput, .5);
+ 			intakeTwo.set(ControlMode.PercentOutput, .5);
+ 		}
+ 		else if(getIntakeOut()){
+ 			intakeThree.set(ControlMode.PercentOutput, -.5);
+ 			intakeFour.set(ControlMode.PercentOutput, -.5);
+ 		}
  	}
  
- 	/**
+ 	public double getRightTriggerAxis(Hand kright) {
+		return getRightTriggerAxis(GenericHID.Hand.kRight);
+	}
+ 	public double getLeftTriggerAxis(Hand kLeft){
+ 		return getLeftTriggerAxis(GenericHID.Hand.kLeft);
+ 	}
+
+	/**
  	 * This function is called periodically during test mode.
  	 */
  	@Override
  	public void testPeriodic() {
+ 	}
+ 	
+ 	public boolean getWinchAct(){
+ 		return xBox.getBumper(GenericHID.Hand.kRight);
+ 	}
+ 	public boolean getWinchRev(){
+ 		return xBox.getBumper(GenericHID.Hand.kLeft);
+ 	}
+ 	
+ 	public double getBoxLiftAct(){
+ 		return xBox.getTriggerAxis(GenericHID.Hand.kRight);
+ 	}
+ 	public double getBoxLiftRev(){
+ 		return xBox.getTriggerAxis(GenericHID.Hand.kLeft);
+ 	}
+ 	
+ 	public boolean getIntakeIn(){
+ 		return xBox.getAButton();
+ 	}
+ 	public boolean getIntakeOut(){
+ 		return xBox.getBButton();
  	}
  }
