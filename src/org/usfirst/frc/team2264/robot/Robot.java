@@ -14,7 +14,9 @@
  import edu.wpi.first.wpilibj.IterativeRobot;
  import edu.wpi.first.wpilibj.Joystick;
  import edu.wpi.first.wpilibj.Timer;
- import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  import edu.wpi.first.wpilibj.command.TimedCommand;
  /**
@@ -31,12 +33,19 @@
  	private String m_autoSelected;
  	private SendableChooser<String> m_chooser = new SendableChooser<>();
  	private double autoStartTime;
-	
+ 	
+ 	
+ 	TalonSRX boxLift = new TalonSRX(RobotMap.BOX_LIFT_MOTOR_PORT);
+ 	TalonSRX leftBT = new TalonSRX(RobotMap.LEFT_SEC_MOTOR_PORT);
+ 	TalonSRX rightBT = new TalonSRX(RobotMap.RIGHT_SEC_MOTOR_PORT);
  	TalonSRX leftT = new TalonSRX(RobotMap.LEFT_MOTOR_PORT);
  	TalonSRX rightT = new TalonSRX(RobotMap.RIGHT_MOTOR_PORT);
  	Joystick joystickL = new Joystick(RobotMap.LEFT_JOYSTICK_PORT);
  	Joystick joystickR = new Joystick(RobotMap.RIGHT_JOYSTICK_PORT);
  	
+ 	Button liftUp = new JoystickButton(joystickR, RobotMap.LIFT_BUTTON_UP);
+ 	Button liftDown = new JoystickButton(joystickL, RobotMap.LIFT_BUTTON_DOWN);
+	
  	TimedCommand autoForward = new TimedCommand(RobotMap.AUTO_TIMER);
  	
  	/**
@@ -114,12 +123,17 @@
  	
  	private void autoStop() {
  		leftT.set(ControlMode.PercentOutput, 0);
+ 		leftBT.set(ControlMode.PercentOutput, 0);
  		rightT.set(ControlMode.PercentOutput, 0);
+ 		rightBT.set(ControlMode.PercentOutput, 0);
  	}
  	private void autoForward() {
 		// TODO Auto-generated method stub
+ 		
+ 		leftBT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*1);
  		leftT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_LEFT*1);
 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_RIGHT*1);
+		rightBT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*1);
 	}
 
 	/**
@@ -132,7 +146,18 @@
  		SmartDashboard.putNumber("Left Joystick" , joystickL.getY());
  		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
  		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY());
+ 		leftBT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*joystickL.getY());
  		rightT.set(ControlMode.PercentOutput, 0.81*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY());
+ 		rightT.set(ControlMode.PercentOutput, 0.81*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY());
+ 		
+ 		if(getButton(liftUp)()))
+ 		{
+ 			 boxLift.set(ControlMode.PercentOutput, 1);
+ 		}
+ 		else if(getButton(liftDown)()))
+ 		{
+ 			boxLift.set(ControlMode.PercentOutput, -1);
+ 		}
  		
  	}
  
