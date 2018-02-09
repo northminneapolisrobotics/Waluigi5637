@@ -160,12 +160,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		rightT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY()); //Remove negative sign to invert motor direction
  		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY()); //Remove negative sign to invert motor direction
  		
- 		if(getBoxLiftAct() > 0.1)
+ 		if(getBoxLiftAct() > RobotMap.TRIGGER_ACTIVATION)
  		{
  			boxLift.set(ControlMode.PercentOutput, getBoxLiftAct());
  		}
  		//switch to triggers
- 		else if(getBoxLiftRev() > 0.1)
+ 		else if(getBoxLiftRev() > RobotMap.TRIGGER_ACTIVATION)
  		{
  			boxLift.set(ControlMode.PercentOutput, -1 * getBoxLiftRev());
  		}
@@ -174,11 +174,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		}
  		
  		if(getWinchAct()){
- 			winchMotor.set(ControlMode.PercentOutput, .5);
+ 			winchMotor.set(ControlMode.PercentOutput, RobotMap.WINCH_SPEED_ACT);
  		}
  		//set to bumpers
  		else if(getWinchRev()){
- 			winchMotor.set(ControlMode.PercentOutput, -.5);
+ 			winchMotor.set(ControlMode.PercentOutput, RobotMap.WINCH_SPEED_REV);
  		}
  		else{
  			winchMotor.set(ControlMode.PercentOutput, 0);
@@ -186,12 +186,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		
  		if(getIntakeIn()){
  			
- 			intakeLeft.set(ControlMode.PercentOutput, -.5);
- 			intakeRight.set(ControlMode.PercentOutput, .5);
+ 			intakeLeft.set(ControlMode.PercentOutput, RobotMap.INTAKE_LEFT_ACT);
+ 			intakeRight.set(ControlMode.PercentOutput, RobotMap.INTAKE_RIGHT_ACT);
  		}
  		else if(getIntakeOut()){
- 			intakeLeft.set(ControlMode.PercentOutput, .5);
- 			intakeRight.set(ControlMode.PercentOutput, -.5);
+ 			intakeLeft.set(ControlMode.PercentOutput, RobotMap.INTAKE_LEFT_REV);
+ 			intakeRight.set(ControlMode.PercentOutput, RobotMap.INTAKE_RIGHT_REV);
  		}
  		else{
  			intakeLeft.set(ControlMode.PercentOutput, 0);
