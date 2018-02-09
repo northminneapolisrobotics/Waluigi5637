@@ -5,13 +5,14 @@
  /* the project.                                                               */
  /*----------------------------------------------------------------------------*/
  
- package org.usfirst.frc.team2264.robot;
+ package org.usfirst.frc.team5637.robot;
 
  import com.ctre.phoenix.motorcontrol.ControlMode;
 
  import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
  import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -37,10 +38,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  	private double autoStartTime;
  	
  	TalonSRX winchMotor = new TalonSRX(RobotMap.WINCH_MOTOR_PORT);
- 	TalonSRX intakeFour = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_FOUR);
- 	TalonSRX intakeThree = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_THREE);
- 	TalonSRX intakeTwo = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_TWO);
- 	TalonSRX intakeOne = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_ONE);
+ 	TalonSRX intakeLeft = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_LEFT);
+ 	TalonSRX intakeRight = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_RIGHT);
+ 	//TalonSRX intakeTwo = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_TWO);
+ 	//TalonSRX intakeOne = new TalonSRX(RobotMap.INTAKE_MOTOR_PORT_ONE);
  	TalonSRX boxLift = new TalonSRX(RobotMap.BOX_LIFT_MOTOR_PORT);
  	TalonSRX leftBT = new TalonSRX(RobotMap.LEFT_SEC_MOTOR_PORT);
  	TalonSRX rightBT = new TalonSRX(RobotMap.RIGHT_SEC_MOTOR_PORT);
@@ -52,6 +53,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  	XboxController xBox = new XboxController(RobotMap.XBOX_PORT);
  	
  	TimedCommand autoForward = new TimedCommand(RobotMap.AUTO_TIMER);
+ 	
+ 	CameraServer forwardCamera = CameraServer.getInstance();
+ 	CameraServer backCamera = CameraServer.getInstance();
  	
  	/**
  	 * This function is run when the robot is first started up and should be
@@ -68,6 +72,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		m_chooser.addObject("My Auto", kCustomAuto);
  		SmartDashboard.putData("Auto choices", m_chooser);
  		
+ 		forwardCamera.startAutomaticCapture();
+ 		backCamera.startAutomaticCapture();
  	}
  
  	/**
@@ -148,19 +154,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		//puts the y number of the joysticks on the dashboard.
  		SmartDashboard.putNumber("Left Joystick" , joystickL.getY());
  		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
- 		leftT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY());
- 		leftBT.set(ControlMode.PercentOutput, RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*joystickL.getY());
- 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY());
- 		rightT.set(ControlMode.PercentOutput, RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY());
+ 		leftT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY()); //Remove negative sign to invert motor direction
+ 		leftBT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*joystickL.getY()); //Remove negative sign to invert motor direction
+ 		
+ 		rightT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY()); //Remove negative sign to invert motor direction
+ 		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY()); //Remove negative sign to invert motor direction
  		
  		if(getBoxLiftAct() > 0.1)
  		{
- 			 boxLift.set(ControlMode.PercentOutput, getRightTriggerAxis(GenericHID.Hand.kRight));
+ 			boxLift.set(ControlMode.PercentOutput, getBoxLiftAct());
  		}
  		//switch to triggers
  		else if(getBoxLiftRev() > 0.1)
  		{
- 			boxLift.set(ControlMode.PercentOutput, -1*getLeftTriggerAxis(GenericHID.Hand.kLeft));
+ 			boxLift.set(ControlMode.PercentOutput, -1 * getBoxLiftRev());
+ 		}
+ 		else{
+ 			boxLift.set(ControlMode.PercentOutput, 0);
  		}
  		
  		if(getWinchAct()){
@@ -170,25 +180,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		else if(getWinchRev()){
  			winchMotor.set(ControlMode.PercentOutput, -.5);
  		}
+ 		else{
+ 			winchMotor.set(ControlMode.PercentOutput, 0);
+ 		}
  		
  		if(getIntakeIn()){
  			
- 			intakeOne.set(ControlMode.PercentOutput, .5);
- 			intakeTwo.set(ControlMode.PercentOutput, .5);
+ 			intakeLeft.set(ControlMode.PercentOutput, -.5);
+ 			intakeRight.set(ControlMode.PercentOutput, .5);
  		}
  		else if(getIntakeOut()){
- 			intakeThree.set(ControlMode.PercentOutput, -.5);
- 			intakeFour.set(ControlMode.PercentOutput, -.5);
+ 			intakeLeft.set(ControlMode.PercentOutput, .5);
+ 			intakeRight.set(ControlMode.PercentOutput, -.5);
+ 		}
+ 		else{
+ 			intakeLeft.set(ControlMode.PercentOutput, 0);
+ 			intakeRight.set(ControlMode.PercentOutput, 0);
  		}
  	}
  
- 	public double getRightTriggerAxis(Hand kright) {
-		return getRightTriggerAxis(GenericHID.Hand.kRight);
-	}
- 	public double getLeftTriggerAxis(Hand kLeft){
- 		return getLeftTriggerAxis(GenericHID.Hand.kLeft);
- 	}
-
 	/**
  	 * This function is called periodically during test mode.
  	 */
