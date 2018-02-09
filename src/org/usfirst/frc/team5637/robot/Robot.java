@@ -14,12 +14,9 @@
  import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
  import edu.wpi.first.wpilibj.Joystick;
  import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  import edu.wpi.first.wpilibj.command.TimedCommand;
  /**
@@ -31,10 +28,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
   */
  
  public class Robot extends IterativeRobot {
- 	private static final String kDefaultAuto = "Default";
- 	private static final String kCustomAuto = "My Auto";
- 	private String m_autoSelected;
- 	private SendableChooser<String> m_chooser = new SendableChooser<>();
  	private double autoStartTime;
  	
  	TalonSRX winchMotor = new TalonSRX(RobotMap.WINCH_MOTOR_PORT);
@@ -68,11 +61,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 	
  	@Override
  	public void robotInit() {
- 		m_chooser.addDefault("Default Auto", kDefaultAuto);
- 		m_chooser.addObject("My Auto", kCustomAuto);
- 		SmartDashboard.putData("Auto choices", m_chooser);
- 		
- 		forwardCamera.startAutomaticCapture();
+  		forwardCamera.startAutomaticCapture();
  		backCamera.startAutomaticCapture();
  	}
  
@@ -89,12 +78,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  	 */
  	@Override
  	public void autonomousInit() {
- 		m_autoSelected = m_chooser.getSelected();
- 		
- 		// autoSelected = SmartDashboard.getString("Auto Selector",
- 		// defaultAuto);
- 		System.out.println("Auto selected: " + m_autoSelected);
- 		
  		autoStartTime = System.currentTimeMillis();
  		
  	}
@@ -104,33 +87,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  	 */
  	@Override
  	public void autonomousPeriodic() {
- 		switch (m_autoSelected) {
- 			case kCustomAuto:
- 				// Put custom auto code here
- 				if(System.currentTimeMillis() - autoStartTime <= RobotMap.AUTO_TIMER){
- 		 			autoForward();
- 		 		}
- 		 		else {
- 		 			autoStop();
- 		 		}
- 				
- 				break;
- 				
- 			case kDefaultAuto:
- 			default:
- 				
- 				if(System.currentTimeMillis() - autoStartTime <= RobotMap.AUTO_TIMER){
- 		 			autoForward();
- 		 		}
- 		 		else {
- 		 			autoStop();
- 		 		}
-				//default auto code
- 				break;
- 				
- 				
+ 		// Put custom auto code here
+ 		if(System.currentTimeMillis() - autoStartTime <= RobotMap.AUTO_TIMER){
+ 			autoForward();
  		}
+ 		else {
+ 			autoStop();
+ 		}				
  	}
+
  	
  	private void autoStop() {
  		leftT.set(ControlMode.PercentOutput, 0);
