@@ -119,11 +119,11 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  		//puts the y number of the joysticks on the dashboard.
  		SmartDashboard.putNumber("Left Joystick" , joystickL.getY());
  		SmartDashboard.putNumber("Right Joystick" , joystickR.getY());
- 		leftT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT*joystickL.getY()); //Remove negative sign to invert motor direction
- 		leftBT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*joystickL.getY()); //Remove negative sign to invert motor direction
+ 		leftT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT*Math.pow(joystickL.getY(), 2)); //Remove negative sign to invert motor direction
+ 		leftBT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*Math.pow(joystickL.getY(), 2)); //Remove negative sign to invert motor direction
  		
- 		rightT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*joystickR.getY()); //Remove negative sign to invert motor direction
- 		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*joystickR.getY()); //Remove negative sign to invert motor direction
+ 		rightT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*Math.pow(joystickR.getY(), 2)); //Remove negative sign to invert motor direction
+ 		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*Math.pow(joystickR.getY, 2)); //Remove negative sign to invert motor direction
  		
  		if(getBoxLiftAct() > RobotMap.TRIGGER_ACTIVATION)
  		{

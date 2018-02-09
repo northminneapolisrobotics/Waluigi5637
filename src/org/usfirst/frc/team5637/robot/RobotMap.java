@@ -18,7 +18,7 @@ public class RobotMap {
 	final static int RIGHT_JOYSTICK_PORT = 0;
 	
 	final static double TRIGGER_ACTIVATION = 0.1;
-	final static double MOTOR_SPEED = .5;
+	final static double MOTOR_SPEED = .8;
 	final static double MOTOR_ADJUST = .91;
 	final static double MOTOR_ADJUST_SEC = 1;
 	final static int MOTOR_DIRECTION_LEFT = 1;
