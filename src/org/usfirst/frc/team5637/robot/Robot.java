@@ -107,7 +107,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  		switch (m_autoSelected) {
  			case kCustomAuto:
  				// Put custom auto code here
- 				if(System.currentTimeMillis() - autoStartTime <= 5000){
+ 				if(System.currentTimeMillis() - autoStartTime <= RobotMap.AUTO_TIMER){
  		 			autoForward();
  		 		}
  		 		else {
@@ -119,7 +119,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  			case kDefaultAuto:
  			default:
  				
- 				if(System.currentTimeMillis() - autoStartTime <= 5000){
+ 				if(System.currentTimeMillis() - autoStartTime <= RobotMap.AUTO_TIMER){
  		 			autoForward();
  		 		}
  		 		else {
