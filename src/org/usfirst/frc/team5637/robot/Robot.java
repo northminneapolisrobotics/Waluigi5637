@@ -123,7 +123,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  		leftBT.set(ControlMode.PercentOutput, -RobotMap.MOTOR_FULL_ADJUST_LEFT_SEC*Math.pow(joystickL.getY(), 2)); //Remove negative sign to invert motor direction
  		
  		rightT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT*Math.pow(joystickR.getY(), 2)); //Remove negative sign to invert motor direction
- 		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*Math.pow(joystickR.getY, 2)); //Remove negative sign to invert motor direction
+ 		rightBT.set(ControlMode.PercentOutput, -RobotMap.AUTO_MOTOR_ADJUST_ONE*RobotMap.MOTOR_FULL_ADJUST_RIGHT_SEC*Math.pow(joystickR.getY(), 2)); //Remove negative sign to invert motor direction
  		
  		if(getBoxLiftAct() > RobotMap.TRIGGER_ACTIVATION)
  		{

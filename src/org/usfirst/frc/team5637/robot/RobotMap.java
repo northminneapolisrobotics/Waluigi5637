@@ -19,8 +19,10 @@ public class RobotMap {
 	
 	final static double TRIGGER_ACTIVATION = 0.1;
 	final static double MOTOR_SPEED = .8;
-	final static double MOTOR_ADJUST = .91;
-	final static double MOTOR_ADJUST_SEC = 1;
+	final static double MOTOR_ADJUST_LEFT = .91;
+	final static double MOTOR_ADJUST_RIGHT = 1;
+	final static double MOTOR_ADJUST_BACKLEFT = 1;
+	final static double MOTOR_ADJUST_BACKRIGHT = 1;
 	final static int MOTOR_DIRECTION_LEFT = 1;
 	final static int MOTOR_DIRECTION_RIGHT = -1;
 	final static double AUTO_MOTOR_ADJUST_ONE = 1;
@@ -33,10 +35,10 @@ public class RobotMap {
 	final static double INTAKE_LEFT_REV = 0.5;
 	final static double INTAKE_RIGHT_REV = -0.5;
 	
-	final static double MOTOR_FULL_ADJUST_LEFT_SEC = RobotMap.MOTOR_DIRECTION_LEFT*RobotMap.MOTOR_SPEED;
-	final static double MOTOR_FULL_ADJUST_LEFT = RobotMap.MOTOR_DIRECTION_LEFT*RobotMap.MOTOR_SPEED;
-	final static double MOTOR_FULL_ADJUST_RIGHT = RobotMap.MOTOR_DIRECTION_RIGHT*RobotMap.MOTOR_ADJUST*RobotMap.MOTOR_SPEED;
-	final static double MOTOR_FULL_ADJUST_RIGHT_SEC = RobotMap.MOTOR_DIRECTION_RIGHT*RobotMap.MOTOR_ADJUST_SEC*RobotMap.MOTOR_SPEED;
+	final static double MOTOR_FULL_ADJUST_LEFT_SEC = RobotMap.MOTOR_ADJUST_BACKLEFT*RobotMap.MOTOR_DIRECTION_LEFT*RobotMap.MOTOR_SPEED;
+	final static double MOTOR_FULL_ADJUST_LEFT = RobotMap.MOTOR_ADJUST_LEFT*RobotMap.MOTOR_DIRECTION_LEFT*RobotMap.MOTOR_SPEED;
+	final static double MOTOR_FULL_ADJUST_RIGHT = RobotMap.MOTOR_DIRECTION_RIGHT*RobotMap.MOTOR_ADJUST_RIGHT*RobotMap.MOTOR_SPEED;
+	final static double MOTOR_FULL_ADJUST_RIGHT_SEC = RobotMap.MOTOR_DIRECTION_RIGHT*RobotMap.MOTOR_ADJUST_BACKRIGHT*RobotMap.MOTOR_SPEED;
 
 	final static double AUTO_MOTOR_ADJUST = 0.5;
 	final static double AUTO_TIMER = 5000;
